@@ -5,10 +5,11 @@ import {
   GoogleProvider,
   DataGoogleIamPolicy,
   CloudRunServiceIamPolicy,
-} from "./.gen/providers/google";
+} from "@cdktf/provider-google";
+
 import * as path from "path";
 import * as fs from "fs";
-import 'dotenv/config';
+import "dotenv/config";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
@@ -34,19 +35,15 @@ class MyStack extends TerraformStack {
     const cloudrunsvcapp = new CloudRunService(this, "GcpCDKCloudrunsvc", {
       location: local,
       name: "gcpcdktfcloudrunsvc2020",
-      template: [
-        {
-          spec: [
+      template: {
+        spec: {
+          containers: [
             {
-              containers: [
-                {
-                  image: imagename,
-                },
-              ],
+              image: imagename,
             },
           ],
         },
-      ],
+      },
     });
 
     const policy_data = new DataGoogleIamPolicy(this, "datanoauth", {
@@ -65,13 +62,12 @@ class MyStack extends TerraformStack {
       policyData: policy_data.policyData,
     });
 
-    new TerraformOutput(this, "cdktfcloudrunUrl", {
-      value: "${" + cloudrunsvcapp.fqn + ".status[0].url}",
-    });
+    // new TerraformOutput(this, "cdktfcloudrunUrl", {
+    //   value: "" + cloudrunsvcapp.fqn + ".status[0].url",
+    // });
 
-    const status = cloudrunsvcapp.status("GcpCDKCloudrunsvc");
     new TerraformOutput(this, "cdktfcloudrunUrlN", {
-      value: status.url,
+      value: cloudrunsvcapp.status.get(0).url,
     });
   }
 }
