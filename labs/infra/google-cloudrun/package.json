@@ -8,6 +8,8 @@
     "get": "cdktf get",
     "build": "yarn get && tsc",
     "synth": "cdktf synth",
+    "deploy": "cdktf deploy",
+    "destroy": "cdktf destroy",
     "compile": "tsc --pretty",
     "watch": "tsc -w",
     "test": "jest",
