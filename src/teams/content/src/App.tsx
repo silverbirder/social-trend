@@ -6,7 +6,12 @@ const App = () => {
     <>
       <FirestoreCollection
         path="tweets"
-        limit={100}
+        filter={[
+          ["slideHosts", "array-contains-any", ["speakerdeck.com"]],
+          ["createdAt", ">=", new Date("2022-04-21 00:00:00")],
+          ["createdAt", "<=", new Date("2022-04-21 23:59:59")],
+        ]}
+        limit={10}
         //@ts-ignore
         render={({ isLoading, data }) => {
           return isLoading ? (
