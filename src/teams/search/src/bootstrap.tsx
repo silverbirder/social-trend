@@ -1,0 +1,30 @@
+import ReactDOM from "react-dom/client";
+import firebase from "@firebase/app";
+import "@firebase/firestore";
+//@ts-ignore
+import { FirestoreProvider } from "react-firestore";
+import App from "./App";
+//@ts-ignore
+import("content/XContent");
+
+customElements.define(
+  "x-search",
+  class extends HTMLElement {
+    connectedCallback() {
+      const firebaseConfig = {
+        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+        projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+      };
+      firebase.initializeApp(firebaseConfig);
+      const mountPoint = document.createElement("span");
+      this.attachShadow({ mode: "open" }).appendChild(mountPoint);
+      const root = ReactDOM.createRoot(mountPoint as HTMLElement);
+      root.render(
+        <FirestoreProvider firebase={firebase}>
+          <App />
+          <x-content />
+        </FirestoreProvider>
+      );
+    }
+  }
+);
