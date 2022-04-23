@@ -44,6 +44,21 @@ const config = {
           strictVersion: true,
           requiredVersion: "^18.0.0",
         },
+        firebase: {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "^8.6.8",
+        },
+        "react-firestore": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "^1.0.1",
+        },
+        dotenv: {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "^16.0.0",
+        },
       },
     }),
   ],
