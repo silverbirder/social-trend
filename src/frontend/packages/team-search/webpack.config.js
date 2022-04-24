@@ -14,7 +14,7 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
-    port: 3001,
+    port: 3002,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -29,10 +29,10 @@ const config = {
       ),
     }),
     new ModuleFederationPlugin({
-      name: "content",
+      name: "search",
       filename: "remoteEntry.js",
       exposes: {
-        "./XContent": "./src/bootstrap",
+        "./XSearch": "./src/bootstrap",
       },
       shared: {
         react: {
@@ -44,22 +44,7 @@ const config = {
           singleton: true,
           strictVersion: true,
           requiredVersion: "^18.0.0",
-        },
-        firebase: {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^8.6.8",
-        },
-        "react-firestore": {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^1.0.1",
-        },
-        dotenv: {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^16.0.0",
-        },
+        }
       },
     }),
   ],

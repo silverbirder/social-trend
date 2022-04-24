@@ -1,8 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { DefinePlugin } = require("webpack");
 const { ModuleFederationPlugin } = require("webpack").container;
-require("dotenv").config();
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -14,24 +12,17 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
-    port: 3002,
+    port: 8080,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-    new DefinePlugin({
-      "process.env.REACT_APP_FIREBASE_PROJECT_ID": JSON.stringify(
-        process.env.REACT_APP_FIREBASE_PROJECT_ID
-      ),
-      "process.env.REACT_APP_FIREBASE_API_KEY": JSON.stringify(
-        process.env.REACT_APP_FIREBASE_API_KEY
-      ),
-    }),
     new ModuleFederationPlugin({
-      name: "search",
+      name: "all",
       remotes: {
         content: "content@http://localhost:3001/remoteEntry.js",
+        search: "search@http://localhost:3002/remoteEntry.js",
       },
       shared: {
         react: {
@@ -43,21 +34,6 @@ const config = {
           singleton: true,
           strictVersion: true,
           requiredVersion: "^18.0.0",
-        },
-        firebase: {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^8.6.8",
-        },
-        "react-firestore": {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^1.0.1",
-        },
-        dotenv: {
-          singleton: true,
-          strictVersion: true,
-          requiredVersion: "^16.0.0",
         },
       },
     }),

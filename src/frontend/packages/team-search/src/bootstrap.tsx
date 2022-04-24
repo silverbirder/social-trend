@@ -5,7 +5,7 @@ import "@firebase/firestore";
 import { FirestoreProvider } from "react-firestore";
 import App from "./App";
 
-export default class XContent extends HTMLElement {
+export default class XSearch extends HTMLElement {
   connectedCallback() {
     const firebaseConfig = {
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,4 +23,4 @@ export default class XContent extends HTMLElement {
   }
 }
 
-customElements.define("x-content", XContent);
+customElements.define("x-search", XSearch);
