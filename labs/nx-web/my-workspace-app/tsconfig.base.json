@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@my-workspace-app/my-new-lib": ["libs/my-new-lib/src/index.ts"],
+      "@myorg/my-new-lib2": ["libs/my-new-lib2/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

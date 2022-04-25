@@ -1,0 +1,23 @@
+{
+  "root": "libs/my-new-lib2",
+  "sourceRoot": "libs/my-new-lib2/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/my-new-lib2/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/my-new-lib2"],
+      "options": {
+        "jestConfig": "libs/my-new-lib2/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

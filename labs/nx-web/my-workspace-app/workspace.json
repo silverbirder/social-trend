@@ -2,6 +2,10 @@
   "version": 2,
   "projects": {
     "my-app": "apps/my-app",
-    "my-app-e2e": "apps/my-app-e2e"
+    "my-app-e2e": "apps/my-app-e2e",
+    "my-new-app": "apps/my-new-app",
+    "my-new-app-e2e": "apps/my-new-app-e2e",
+    "my-new-lib": "libs/my-new-lib",
+    "my-new-lib2": "libs/my-new-lib2"
   }
 }
