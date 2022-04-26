@@ -32,7 +32,7 @@ const config = {
       name: "search",
       filename: "remoteEntry.js",
       exposes: {
-        "./XSearch": "./src/bootstrap",
+        "./App": "./src/bootstrap",
       },
       shared: {
         react: {

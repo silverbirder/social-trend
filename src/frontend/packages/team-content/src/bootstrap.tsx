@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-export default class XContent extends HTMLElement {
+export class XContent extends HTMLElement {
   connectedCallback() {
     const mountPoint = document.createElement("span");
     this.attachShadow({ mode: "open" }).appendChild(mountPoint);
@@ -9,5 +9,3 @@ export default class XContent extends HTMLElement {
     root.render(<App />);
   }
 }
-
-customElements.define("x-content", XContent);

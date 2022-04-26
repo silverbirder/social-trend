@@ -22,7 +22,7 @@ const config = {
       name: "content",
       filename: "remoteEntry.js",
       exposes: {
-        "./XContent": "./src/bootstrap",
+        "./App": "./src/bootstrap",
       },
       shared: {
         react: {
