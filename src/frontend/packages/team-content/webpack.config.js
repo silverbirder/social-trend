@@ -22,7 +22,7 @@ const config = {
       name: "content",
       filename: "remoteEntry.js",
       exposes: {
-        "./App": "./src/index",
+        "./App": "./src/remoteEntry",
       },
       shared: {
         react: {

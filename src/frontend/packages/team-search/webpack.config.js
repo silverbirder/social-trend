@@ -32,7 +32,7 @@ const config = {
       name: "search",
       filename: "remoteEntry.js",
       exposes: {
-        "./App": "./src/index",
+        "./App": "./src/remoteEntry",
       },
       shared: {
         react: {
@@ -46,7 +46,7 @@ const config = {
           strictVersion: true,
           requiredVersion: "^18.0.0",
           eager: true,
-        }
+        },
       },
     }),
   ],
