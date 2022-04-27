@@ -1,3 +1,9 @@
+declare namespace JSX {
+  interface IntrinsicElements {
+    [tagName: string]: any;
+  }
+}
+
 declare module "content/App" {
   const XContent: CustomElementConstructor;
 
