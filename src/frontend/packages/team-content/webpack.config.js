@@ -29,11 +29,13 @@ const config = {
           singleton: true,
           strictVersion: true,
           requiredVersion: "^18.0.0",
+          eager: true,
         },
         "react-dom": {
           singleton: true,
           strictVersion: true,
           requiredVersion: "^18.0.0",
+          eager: true,
         },
       },
     }),
