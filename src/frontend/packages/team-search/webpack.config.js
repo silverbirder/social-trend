@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { DefinePlugin } = require("webpack");
 const { ModuleFederationPlugin } = require("webpack").container;
 require("dotenv").config();
 
@@ -14,19 +13,11 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
-    port: 3002,
+    port: 4001,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-    }),
-    new DefinePlugin({
-      "process.env.REACT_APP_FIREBASE_PROJECT_ID": JSON.stringify(
-        process.env.REACT_APP_FIREBASE_PROJECT_ID
-      ),
-      "process.env.REACT_APP_FIREBASE_API_KEY": JSON.stringify(
-        process.env.REACT_APP_FIREBASE_API_KEY
-      ),
     }),
     new ModuleFederationPlugin({
       name: "search",
