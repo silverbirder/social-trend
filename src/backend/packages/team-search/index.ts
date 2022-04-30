@@ -13,8 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/", async (req: Request, res: Response) => {
-  const { hosts, createdDate } = req.query;
-  console.log({ hosts, createdDate });
+  const { hosts, createdDate, keyword } = req.query;
+  console.log({ hosts, createdDate, keyword });
   const fixedHosts =
     hosts !== undefined
       ? `${hosts}`.split(",")
@@ -26,6 +26,8 @@ app.get("/", async (req: Request, res: Response) => {
       : `${nowDate.getFullYear()}-${
           nowDate.getMonth() + 1
         }-${nowDate.getDate()}`;
+  const fixedKeyword = `${keyword}`;
+
   const querySnapshot: QuerySnapshot = await firestore
     .collection("tweets")
     .where("createdAt", ">=", new Date(`${fixedcreatedDate} 00:00:00`))
@@ -33,11 +35,13 @@ app.get("/", async (req: Request, res: Response) => {
     .where("slideHosts", "array-contains-any", fixedHosts)
     .limit(100)
     .get();
-  const tweets = querySnapshot.docs.map(
-    (documentSnapshot: DocumentSnapshot) => {
-      return documentSnapshot.data();
-    }
-  );
+  let tweets = querySnapshot.docs.map((documentSnapshot: DocumentSnapshot) => {
+    return documentSnapshot.data();
+  });
+  if (fixedKeyword !== "") {
+    const r = new RegExp(fixedKeyword);
+    tweets = tweets.filter((tweet: any) => r.test(tweet.text));
+  }
   return res.status(200).send(tweets);
 });
 
