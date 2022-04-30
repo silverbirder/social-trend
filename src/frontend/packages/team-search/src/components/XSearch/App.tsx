@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 
 type Condition = {
   keyword: string;
+  domains: DomainType[];
 };
-const newCondition = () => {
-  return { keyword: "" };
+
+type DomainType = {
+  name: string;
+  checked: boolean;
+};
+
+const newCondition = (): Condition => {
+  return {
+    keyword: "",
+    domains: [
+      { name: "speakerdeck.com", checked: false },
+      { name: "docs.google.com", checked: false },
+      { name: "www.slideshare.net", checked: false },
+    ],
+  };
 };
 
 type KeywordSearchProps = {
@@ -13,14 +27,44 @@ type KeywordSearchProps = {
   setCondition: (condition: Condition) => void;
 };
 
+type UseSetConditionArgs = {
+  condition: Condition;
+  setCondition: (condition: Condition) => void;
+};
+
+const useUpdateCondition = (args: UseSetConditionArgs) => {
+  const { condition, setCondition } = args;
+  const updateCondition = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, type: "keyword" | "domain") => {
+      const newCond = { ...condition };
+      switch (type) {
+        case "keyword":
+          newCond.keyword = e.target.value;
+          break;
+        case "domain":
+          const { value, checked } = e.target;
+          newCond.domains.forEach((domain) => {
+            if (domain.name !== value) return;
+            domain.checked = checked;
+          });
+          break;
+      }
+      setCondition(newCond);
+    },
+    [condition, setCondition]
+  );
+  return { updateCondition };
+};
+
 const KeywordSearch = React.memo((props: KeywordSearchProps) => {
   console.log("render KeywordSearch");
-  const { condition, setCondition } = props;
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newCond = { ...condition };
-    newCond.keyword = e.target.value;
-    setCondition(newCond);
-  };
+  const { condition } = props;
+  const { updateCondition } = useUpdateCondition(props);
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      updateCondition(event, "keyword"),
+    [updateCondition]
+  );
   return (
     <input
       type="text"
@@ -31,16 +75,52 @@ const KeywordSearch = React.memo((props: KeywordSearchProps) => {
   );
 });
 
+type DomainSearchProps = {
+  condition: Condition;
+  setCondition: (condition: Condition) => void;
+};
+
+const DomainSearch = React.memo((props: DomainSearchProps) => {
+  console.log("render DomainSearch");
+
+  const { condition } = props;
+  const { updateCondition } = useUpdateCondition(props);
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => updateCondition(e, "domain"),
+    [updateCondition]
+  );
+  return (
+    <p>
+      {condition.domains.map((domain) => (
+        <span key={domain.name}>
+          <input
+            type="checkbox"
+            name="domain"
+            value={domain.name}
+            onChange={onChange}
+            checked={domain.checked}
+          />
+          {domain.name}
+        </span>
+      ))}
+    </p>
+  );
+});
+
 type SearchButtonProps = {
   condition: Condition;
+  setCondition: (condition: Condition) => void;
 };
 
 const SearchButton = React.memo((props: SearchButtonProps) => {
   console.log("render SearchButton");
   const { condition } = props;
-  const onClick = (_: React.MouseEvent) => {
-    console.log(condition);
-  };
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      console.log(condition);
+    },
+    [condition]
+  );
   return <input type="button" value="Search" onClick={onClick}></input>;
 });
 
@@ -50,7 +130,8 @@ const SearchForm = React.memo(() => {
   return (
     <>
       <KeywordSearch condition={condition} setCondition={setCondition} />
-      <SearchButton condition={condition} />
+      <DomainSearch condition={condition} setCondition={setCondition} />
+      <SearchButton condition={condition} setCondition={setCondition} />
     </>
   );
 });
