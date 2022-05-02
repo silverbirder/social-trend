@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useRef } from "react";
 import { useState } from "react";
 import { CustomElementContext } from "./XSearch";
 
@@ -15,7 +15,6 @@ type KeywordSearchProps = {
 const KeywordSearch = React.memo(function KeywordSearch(
   props: KeywordSearchProps
 ) {
-  console.log("render KeywordSearch");
   const { keyword, setKeyword } = props;
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -25,6 +24,7 @@ const KeywordSearch = React.memo(function KeywordSearch(
   return (
     <input
       type="text"
+      name="keyword"
       placeholder="Enter keyword"
       value={keyword}
       onChange={onChange}
@@ -40,8 +40,6 @@ type DomainSearchProps = {
 const DomainSearch = React.memo(function DomainSearch(
   props: DomainSearchProps
 ) {
-  console.log("render DomainSearch");
-
   const { domains, setDomains } = props;
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +79,6 @@ type SearchButtonProps = {
 const SearchButton = React.memo(function SearchButton(
   props: SearchButtonProps
 ) {
-  console.log("render SearchButton");
   const { onClick, disabled } = props;
   return (
     <input
@@ -93,21 +90,18 @@ const SearchButton = React.memo(function SearchButton(
   );
 });
 
-const useSearchButtonClick = (keyword: string, domains: DomainType[]) => {
+const useSearchButtonClick = (formRef: React.RefObject<HTMLFormElement>) => {
   const [disabled, setDisabled] = useState(false);
   const customElement = useContext(CustomElementContext);
   const onClick = useCallback(
     async (_: React.MouseEvent) => {
       const url = new URL(`${process.env.REACT_APP_API_URL}`);
       const params = url.searchParams;
-      params.append("keyword", keyword);
-      params.append(
-        "hosts",
-        domains
-          .filter((domain) => domain.checked)
-          .map((domain) => domain.name)
-          .join(",")
-      );
+      if (!formRef.current) return;
+      const formData = new FormData(formRef.current);
+      for (const [key, value] of formData) {
+        params.append(key, value.toString());
+      }
       try {
         setDisabled(true);
         const res = await (await fetch(url.toString())).json();
@@ -118,32 +112,31 @@ const useSearchButtonClick = (keyword: string, domains: DomainType[]) => {
         setDisabled(false);
       }
     },
-    [customElement, domains, keyword]
+    [customElement, formRef]
   );
   return { onClick, disabled };
 };
 
 const SearchForm = React.memo(function SearchForm() {
-  console.log("render SearchForm");
   const [keyword, setKeyword] = useState("");
   const [domains, setDomains] = useState<DomainType[]>([
     { name: "speakerdeck.com", checked: true },
     { name: "docs.google.com", checked: false },
     { name: "www.slideshare.net", checked: false },
   ]);
-  const { onClick, disabled } = useSearchButtonClick(keyword, domains);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { onClick, disabled } = useSearchButtonClick(formRef);
 
   return (
-    <>
+    <form ref={formRef}>
       <KeywordSearch keyword={keyword} setKeyword={setKeyword} />
       <DomainSearch domains={domains} setDomains={setDomains} />
       <SearchButton onClick={onClick} disabled={disabled} />
-    </>
+    </form>
   );
 });
 
 const App = React.memo(function App() {
-  console.log("render App");
   return <SearchForm />;
 });
 

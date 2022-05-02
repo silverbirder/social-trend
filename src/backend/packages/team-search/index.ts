@@ -13,11 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/", async (req: Request, res: Response) => {
-  const { hosts, createdDate, keyword } = req.query;
-  console.log({ hosts, createdDate, keyword });
-  const fixedHosts =
-    hosts !== undefined
-      ? `${hosts}`.split(",")
+  const { domain, createdDate, keyword } = req.query;
+  console.log({ domain, createdDate, keyword });
+  const fixedDomain =
+    domain !== undefined
+      ? domain
       : ["speakerdeck.com", "docs.google.com", "www.slideshare.net"];
   const nowDate = new Date();
   const fixedcreatedDate =
@@ -32,7 +32,7 @@ app.get("/", async (req: Request, res: Response) => {
     .collection("tweets")
     .where("createdAt", ">=", new Date(`${fixedcreatedDate} 00:00:00`))
     .where("createdAt", "<=", new Date(`${fixedcreatedDate} 23:59:59`))
-    .where("slideHosts", "array-contains-any", fixedHosts)
+    .where("slideHosts", "array-contains-any", fixedDomain)
     .limit(10)
     .get();
   let tweets = querySnapshot.docs.map((documentSnapshot: DocumentSnapshot) => {
@@ -42,6 +42,7 @@ app.get("/", async (req: Request, res: Response) => {
     const r = new RegExp(fixedKeyword);
     tweets = tweets.filter((tweet: any) => r.test(tweet.text));
   }
+  console.log({ tweets });
   return res.status(200).send(tweets);
 });
 
