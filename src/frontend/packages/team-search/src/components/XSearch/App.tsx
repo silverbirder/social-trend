@@ -1,5 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { useState } from "react";
+import { CustomElementContext } from "./XSearch";
 
 type Condition = {
   keyword: string;
@@ -15,7 +16,7 @@ const newCondition = (): Condition => {
   return {
     keyword: "",
     domains: [
-      { name: "speakerdeck.com", checked: false },
+      { name: "speakerdeck.com", checked: true },
       { name: "docs.google.com", checked: false },
       { name: "www.slideshare.net", checked: false },
     ],
@@ -115,13 +116,41 @@ type SearchButtonProps = {
 const SearchButton = React.memo((props: SearchButtonProps) => {
   console.log("render SearchButton");
   const { condition } = props;
+  const [disabled, setDisabled] = useState(false);
+  const customElement = useContext(CustomElementContext);
+  console.log(customElement);
   const onClick = useCallback(
-    (e: React.MouseEvent) => {
-      console.log(condition);
+    async (_: React.MouseEvent) => {
+      const url = new URL(`${process.env.REACT_APP_API_URL}`);
+      const params = url.searchParams;
+      params.append("keyword", condition.keyword);
+      params.append(
+        "hosts",
+        condition.domains
+          .filter((domain) => domain.checked)
+          .map((domain) => domain.name)
+          .join(",")
+      );
+      try {
+        setDisabled(true);
+        const res = await (await fetch(url.toString())).json();
+        customElement.dispatchEvent(new CustomEvent("search", { detail: res }));
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setDisabled(false);
+      }
     },
-    [condition]
+    [condition.domains, condition.keyword, customElement]
   );
-  return <input type="button" value="Search" onClick={onClick}></input>;
+  return (
+    <input
+      type="button"
+      value="Search"
+      onClick={onClick}
+      disabled={disabled}
+    ></input>
+  );
 });
 
 const SearchForm = React.memo(() => {

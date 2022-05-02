@@ -33,7 +33,7 @@ app.get("/", async (req: Request, res: Response) => {
     .where("createdAt", ">=", new Date(`${fixedcreatedDate} 00:00:00`))
     .where("createdAt", "<=", new Date(`${fixedcreatedDate} 23:59:59`))
     .where("slideHosts", "array-contains-any", fixedHosts)
-    .limit(100)
+    .limit(10)
     .get();
   let tweets = querySnapshot.docs.map((documentSnapshot: DocumentSnapshot) => {
     return documentSnapshot.data();

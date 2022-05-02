@@ -5,7 +5,7 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const isProduction = process.env.NODE_ENV === "production";
 const URL_MAP = {
   content: process.env.CONTENT_URL || "http://localhost:3001",
-  search: process.env.SEARCH_URL || "http://localhost:3002",
+  search: process.env.SEARCH_URL || "http://localhost:4001",
 };
 
 const config = {
