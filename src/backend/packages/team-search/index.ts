@@ -17,7 +17,9 @@ app.get("/", async (req: Request, res: Response) => {
   console.log({ domain, createdDate, keyword });
   const fixedDomain =
     domain !== undefined
-      ? domain
+      ? typeof domain === "string"
+        ? [domain]
+        : domain
       : ["speakerdeck.com", "docs.google.com", "www.slideshare.net"];
   const nowDate = new Date();
   const fixedcreatedDate =
