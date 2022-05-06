@@ -6,8 +6,9 @@ declare namespace JSX {
 
 declare module "content/App" {
   const XContent: CustomElementConstructor;
+  const SnsContents: CustomElementConstructor;
 
-  export { XContent };
+  export { XContent, SnsContents };
 }
 
 declare module "search/App" {

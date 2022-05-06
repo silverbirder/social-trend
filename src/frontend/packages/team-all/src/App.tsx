@@ -7,11 +7,7 @@ const SearchResult = (props: SearchResultProps) => {
   const { data } = props;
   return (
     <>
-      {data.map((d) => (
-        <div key={d.id}>
-          {d.id}: {d.text}
-        </div>
-      ))}
+      <sns-contents ids={data.map((d) => `tw-${d.id}`).join(",")} />
     </>
   );
 };
@@ -20,8 +16,9 @@ const App = () => {
   const [searchResult, setSearchResult] = useState<any[]>([]);
   useEffect(() => {
     import("content/App").then((module) => {
-      const { XContent } = module;
+      const { XContent, SnsContents } = module;
       customElements.define("x-content", XContent);
+      customElements.define("sns-contents", SnsContents);
     });
     import("search/App").then((module) => {
       const { XSearch } = module;
