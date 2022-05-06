@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-export class XContent extends HTMLElement {
+export class TwitterContent extends HTMLElement {
   root: ReactDOM.Root | undefined;
   connectedCallback() {
     const mountPoint = document.createElement("span");
