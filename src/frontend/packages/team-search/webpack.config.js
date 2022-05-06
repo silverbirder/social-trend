@@ -2,7 +2,6 @@ const path = require("path");
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
-require("dotenv").config();
 
 const isProduction = process.env.NODE_ENV === "production";
 
