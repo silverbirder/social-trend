@@ -1,5 +1,5 @@
 const path = require("path");
-const Dotenv = require('dotenv-webpack');
+const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
@@ -16,7 +16,7 @@ const config = {
     port: 4001,
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({ systemvars: true }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
