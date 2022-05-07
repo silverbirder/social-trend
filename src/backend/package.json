@@ -2,7 +2,7 @@
   "private": true,
   "name": "backend",
   "scripts": {
-    "start": "lerna run --parallel serve",
+    "start": "lerna run --parallel start",
     "build": "lerna run build"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import cors from "cors";
 import "dotenv/config";
 
 const app: Application = express();
-const PORT = 4002;
+const PORT = process.env.PORT || 4002;
 const firestore = new Firestore();
 
 app.use(express.json());
@@ -28,8 +28,8 @@ app.get("/", async (req: Request, res: Response) => {
       : `${nowDate.getFullYear()}-${
           nowDate.getMonth() + 1
         }-${nowDate.getDate()}`;
-  const fixedKeyword = `${keyword}`;
-
+  const fixedKeyword = keyword !== undefined ? `${keyword}` : "";
+  console.log({ fixedDomain, fixedcreatedDate, fixedKeyword });
   const querySnapshot: QuerySnapshot = await firestore
     .collection("tweets")
     .where("createdAt", ">=", new Date(`${fixedcreatedDate} 00:00:00`))
@@ -44,7 +44,7 @@ app.get("/", async (req: Request, res: Response) => {
     const r = new RegExp(fixedKeyword);
     tweets = tweets.filter((tweet: any) => r.test(tweet.text));
   }
-  console.log({ tweets });
+  console.log(`tweets.length: ${tweets.length}`);
   return res.status(200).send(tweets);
 });
 
