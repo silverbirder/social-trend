@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@silverbirder/o-embed": "^0.0.9",
+    "@silverbirder/o-embed": "^0.0.10",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
