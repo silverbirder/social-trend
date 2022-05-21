@@ -21,7 +21,9 @@ const TwitterContent = (props: TwitterContentProps) => {
       src={"https://twitter.com/openwc/status/" + props.id}
       proxy="https://silverbirder-cors-anywhere.herokuapp.com"
       height="643px"
-    />
+    >
+      <p slot="loading">Loading...</p>
+    </o-embed>
   );
 };
 
